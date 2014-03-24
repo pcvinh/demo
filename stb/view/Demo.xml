@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<view xmlns="http://www.example.org/nagra">
+	<image id="background" x="0" y="0" width="1920" height="1080" href="bg.png" />
+	<group id="rbs_no" x="0" y="0" visible="false">
+		<label id="rbs_no_text_ok" x="592" y="251" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "Pleaes press OK to activate Smart control"/>
+		<label id="rbs_no_text_exit" x="592" y="351" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "Pleaes press Exit to go back to TV"/>
+	</group>
+	<group id="rbs_yes" x="0" y="0" visible="false">
+		<customPivotList id="rbs_yes_tab" x="100" y="145" itemTemplate="TextListItem" visible ="true" focusAtTop="false">
+			<itemConfig movementPositions="-400,0;-200,0;0,0; 200,0; 400,0;" opacityValues="0,1, 1, 1,0" />
+		</customPivotList>
+		<group id="rbs_setting" x="0" y="0" visible="false">
+			<label id="rbs_setting_enable_disable" x="792" y="251" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "Enable/Disable" />
+			<label id="rbs_setting_deactivate" x="792" y="351" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "Press YELLOW to deactivate RBS service." />
+			<label id="rbs_setting_name" x="792" y="451" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "Name" />
+			<TextArea id="rbs_setting_info" x="792" y="551" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "sdfas asdf asdf asdf asd fasf" />
+		</group>		
+		<group id="rbs_userlist" x="0" y="0" visible="false">
+			<label id="rbs_user_allow" x="792" y="351" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "Ban/Allow" />
+			<label id="rbs_user_remove" x="792" y="451" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "Remove" />
+			<TextArea id="rbs_user_info" x="792" y="551" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "User info" />
+			<customPivotList id="userlist" x="100" y="345" itemTemplate="TextListItem" visible ="true">
+					<itemConfig movementPositions="0,-60; 0,0; 0,60; 0,120; 0,180; 0,240; 0,300;" opacityValues="0, 1, 1, 1, 1, 1, 0" />
+			</customPivotList>
+		</group>		
+		<group id="rbs_pair" x="0" y="0" visible="false">
+			<label id="rbs_pair_code" x="592" y="251" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "Pair code: 1249832529834732"/>
+			<label id="rbs_pair_status" x="592" y="351" cssClass="favouritesItem" cssStyle="font-size:38; fill:#ffffff; opacity:1.0;" text = "satus: waiting"/>
+		</group>
+	</group>
+	
+</view>

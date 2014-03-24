@@ -1,0 +1,16 @@
+{
+  "name" : "node.js",
+  "description" : "Realtime stats using node.js, socket.io and redis",
+  "version" : "0.0.1",
+  "author": {
+    "name": "Venu Anuganti",
+    "email": "venu@venublog.com"
+  },
+  "dependencies" : {
+    "redis": "latest",
+    "socket.io": "latest",
+    "express": "latest",
+	"mongodb": "latest"
+  }
+}
+
