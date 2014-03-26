@@ -9,6 +9,22 @@ var fs = require('fs');
 var url = require('url');
 var util = require('util');
 
+// New Code
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/opentv5');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  log('info', 'mongoose once');
+});
+
+var stbSchema = mongoose.Schema({
+    uuid: String,
+	bEnable:  Boolean,
+	user
+	
+})
+
 log('info', 'connected to redis server');
 var currentdata, currentdata2, lastmodified = new Date("1900-01-01 00:00:00"), lastmodified2 = new Date("1900-01-01 00:00:00");
 
@@ -35,40 +51,54 @@ app.get('/', function (req, res) { // to get the "remote"
  * 
  */
 
+function s4() {
+  return Math.floor((1 + Math.random()) * 0x10000)
+             .toString(16)
+             .substring(1);
+};
 
+function guid() {
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+         s4() + '-' + s4() + s4() + s4();
+}
 
 ////////////////////////////////////////////////////////
 //////////// private functions /////////////////////////
 ////////////////////////////////////////////////////////
 
-function store_db() {
+function insert_db() {
 	
 }
 
-function stb_register(caid, smartcart) {
+function query_db() {
 	
 }
 
-
-function stb_deregister(caid, smartcart) {
-	
-}
-function stb_setting(caid, smartcart) {
-	
-}
-function stb_generate_paring_code(caid, smartcart) {
+function update_db() {
 	
 }
 
+//-------- processing -------------//
 
-function stb_listening(caid, smartcart) {
-	
+function stb_process_register(caid, smartcard, mac) {
+
+}
+function stb_process_enable(uuid, data) {
+
+}
+function stb_process_deregister(uuid) {
+
+}
+function stb_process_user_ban_allow(uuid, user_id) {
+
+}
+function stb_process_user_remove(uuid, user_id) {
+
 }
 
-function stb_updating(caid, smartcart) {
-	
-}
+function stb_process_get_paring_code(uuid) {
 
+}
 
 //------------------------------------
 
@@ -104,70 +134,102 @@ function remote_connecting() {
 
 //----- admin task for STB to register OR for STB do settings task @ rbs: register, deregister, setting(update stb info/name, remove user, enable/disable rbs ), pairing code generation... ----//
 
-app.get('/stb_register/', function(request, response, next) {  // input: caid, smartcard --output: the stbid
-	log('info', 'stb_register');
-	//var stbid = request.params.stbid; // param.
+app.get('/stb_register', function(request, response, next) {  // input: caid, smartcard --output: the stbid
 	var caid = request.query.caid;
 	var smartcard = request.query.smartcard;
-	var smartcard = request.query.mac;
+	var mac = request.query.mac;
+	log('info', 'stb_register: ' + caid +" "+ smartcard +" "+ mac);
 	
-	
-	var uuid = stb_register(caid, smartcard); //
-	
-	if(uuid != -1) {
-		ret = '{"ret:0", "description": '+uuid+''}' ;
-	} else {
-		ret = '{"ret:1", "description": "error happen"'}' ;
-	}
+	var ret = stb_process_register(caid, smartcard, mac); //
 	
 	response.send(ret);
 	request.socket.end();
-	next();
 
 });
 
-app.get('/stb_deregister/:uuid', function(request, response, next) {  // input: caid, smartcard --output: the stbid
-	log('info', 'stb_deregister');
-	var stbid = request.params.stbid; // param.
-	var caid = request.query.caid;
-	var smartcard = request.query.smartcard;
+app.post('/stb_enable/:uuid', function(request, response, next) {  
+	var uuid = request.params.uuid;
+	log('info', 'stb_enable: ' + uuid);
 	
-	stb_register(caid, smartcard); //
+	var ret = stb_process_enable(uudi, request.body) ; 
 	
-	response.send();
+	response.send(ret);
 	request.socket.end();
-	next();
-
 });
 
-app.post('/stb_setting/:stbid', function(request, response, next) {  
-	// input: command in json {remove user, update setting info [name, ], } --output: true/false
-	log('info', 'stb_setting');
-	var stbid = request.params.stbid; // param.
-	var caid = request.query.caid;
-	var smartcard = request.query.smartcard;
+app.get('/stb_deregister/:uuid', function(request, response, next) {  
+	var uudi = request.params.uuid;
+	log('info', 'stb_deregister: ' + uuid);
 	
-	stb_register(caid, smartcard, command); //
-	
-	response.send();
+	ret = stb_process_deregister(uudi) ; 
+
+	response.send(ret);
 	request.socket.end();
-	next();
 });
 
-app.get('/generate_paring_code/:stbid', function(request, response, next) { 
-	// stb will request painring code to show into screen. 
-	log('info', 'generate_paring_code' );
-	var stbid = request.params.stbid; // param.
-	var caid = request.query.caid;
-	var smartcard = request.query.smartcard;
+app.get('/stb_user_ban_allow/:uuid', function(request, response, next) {  
+	var uudi = request.params.uuid;
+	var user = request.query.user_id;
 	
-	var code = generate_paring_code(stbid); //
+	log('info', 'stb_user_ban_allow uuid=' + uuid + ", user_id = " + user_id);
 	
-	response.send(code);
+	ret = stb_process_user_ban_allow(uuid, user_id) ; 
+
+	response.send(ret);
 	request.socket.end();
-	next();
-
 });
+
+app.get('/stb_user_remove/:uuid', function(request, response, next) {  
+	var uudi = request.params.uuid;
+	var user = request.query.user_id;
+	
+	log('info', 'stb_user_remove uuid=' + uuid + ", user_id = " + user_id);
+	
+	ret = stb_process_user_remove(uuid, user_id) ; 
+
+	response.send(ret);
+	request.socket.end();
+});
+
+
+
+app.get('/stb_get_paring_code/:uuid', function(request, response, next) {  
+	var uudi = request.params.uuid;
+	log('info', 'stb_get_paring_code: ' + uuid);
+	
+	ret = stb_process_get_paring_code(uudi) ; 
+
+	response.send(ret);
+	request.socket.end();
+});
+
+app.get('/stb_pairing_wait/:uuid', function(request, response, next) {   // just use for notify to STB only.
+	var uudi = request.params.uuid;
+	
+	var channel = "paring"+uuid;
+	log('info', 'stb_pairing_wait: ' + uuid);
+	const subscriber = redis.createClient();
+	subscriber.subscribe(channel);
+	request.socket.setTimeout(60*1000);
+
+	request.socket.on('timeout', function() {
+		subscriber.quit();
+		this.end();
+		log('warn', 'timeout, so quit subcribe & close socket for stb: ' + channel);
+	});
+	
+	subscriber.on("message", function(channel, message) {
+            log('info', 'now response command to stb: ' + channel + " : " + message);
+			//response.type('json');
+			response.send(String(message)); // send the whole message back to stb
+			request.socket.end();
+			this.unsubscribe();
+			this.quit();
+        });
+});
+
+
+
 
 // ---- polling 2 types of polling: listening (GET) (timeout 60s) and updating (POST) ------//
 
