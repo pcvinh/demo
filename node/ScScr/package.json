@@ -10,7 +10,8 @@
     "redis": "latest",
     "socket.io": "latest",
     "express": "latest",
-	"mongodb": "latest"
+	"mongodb": "latest",
+	"mongoose": "latest"
   }
 }
 

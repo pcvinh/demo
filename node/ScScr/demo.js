@@ -21,8 +21,9 @@ db.once('open', function callback () {
 var stbSchema = mongoose.Schema({
     uuid: String,
 	bEnable:  Boolean,
-	user
-	
+	userlist: [{id : ObjectId, User : String, bAllow: Boolean, bConnected: Boolean, Info: String}],
+	stbInfo: {name: String, caid: String, smartcard: String, mac: String},
+	last_sync: Date
 })
 
 log('info', 'connected to redis server');
@@ -51,6 +52,10 @@ app.get('/', function (req, res) { // to get the "remote"
  * 
  */
 
+////////////////////////////////////////////////////////
+//////////// utility functions /////////////////////////
+////////////////////////////////////////////////////////
+
 function s4() {
   return Math.floor((1 + Math.random()) * 0x10000)
              .toString(16)
@@ -62,10 +67,14 @@ function guid() {
          s4() + '-' + s4() + s4() + s4();
 }
 
+
+
 ////////////////////////////////////////////////////////
 //////////// private functions /////////////////////////
 ////////////////////////////////////////////////////////
 
+
+//---------- database process --------///
 function insert_db() {
 	
 }
@@ -78,10 +87,10 @@ function update_db() {
 	
 }
 
-//-------- processing -------------//
+//-------- stb processing -------------//
 
 function stb_process_register(caid, smartcard, mac) {
-
+	
 }
 function stb_process_enable(uuid, data) {
 
@@ -100,7 +109,7 @@ function stb_process_get_paring_code(uuid) {
 
 }
 
-//------------------------------------
+//------------- remote processing --------////
 
 function remote_register() {
 	
@@ -124,6 +133,10 @@ function remote_pairing() {
 
 
 function remote_connecting() {
+	
+}
+
+function is_stb_online() {
 	
 }
 
